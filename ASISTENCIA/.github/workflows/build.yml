@@ -1,19 +1,28 @@
-name: Build
+name: Build and Sonar Analysis
+
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   sonarqube:
-    name: SonarQube
+    name: SonarQube Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          # Es crucial tener fetch-depth: 0 para un análisis completo
+          fetch-depth: 0 
+          
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # Usamos el Secreto que guardaste en GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+          # Opcionalmente, si tienes un token de organización separado,
+          # aunque usualmente el SONAR_TOKEN es suficiente. 
+          # Puedes dejar el SONAR_HOST_URL por defecto.
+          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
